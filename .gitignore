@@ -1,0 +1,19 @@
+#PyCharm
+.idea/
+*.pyc
+~*/
+venv/
+
+#Python
+__pycache__/
+
+#Bot files
+config.json
+*.log
+*.db
+
+#Scripts
+*.sh
+
+#Tests
+scratches/

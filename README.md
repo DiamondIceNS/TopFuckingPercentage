@@ -1,0 +1,3 @@
+This is a very simple Discord bot that accepts a phrase and looks through a server's entire message history to tally usages of that phrase. Results include total appearances along with a top 10 list of members who have used it the most often.
+
+This bot currently has NO caching ability. Every search will cause the bot to brute force search the ENTIRE server message history! If your server is large and has a lot of visible history, this could take well over half an hour to fully search. Use at your own risk.
