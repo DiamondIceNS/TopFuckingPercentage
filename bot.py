@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import re#eeee
 
 from discord import TextChannel
 from discord.ext import commands
@@ -51,13 +52,27 @@ async def tfp(ctx, *, phrase: str):
         await ctx.send("Already running a search, wait your turn.")
         return
     is_search_running = True
-    await ctx.send("Searching for occurrences of `{}`...".format(phrase))
+    exp = None
+    if phrase.startswith('-r '):
+        phrase = phrase[3:]
+        try:
+            exp = re.compile(phrase)
+        except:
+            raise CommandError
+        await ctx.send("Searching for regex `{}`...".format(phrase))
+    else:
+        await ctx.send("Searching for occurrences of `{}`...".format(phrase))
     async with ctx.typing():
         totals = dict()
         for channel in (c for c in ctx.guild.channels if type(c) is TextChannel and c.permissions_for(ctx.guild.me).read_message_history):
             msgs = await channel.history(limit=None, before=ctx.message).flatten()
             for msg in msgs:
-                ct = msg.content.lower().count(phrase.lower())
+                if exp:
+                    match = re.search(exp, msg.content.lower())
+                    ct = 1 if match else 0
+                else:
+                    ct = msg.content.lower().count(phrase.lower())
+
                 if ct > 0:
                     if msg.author.name not in totals:
                         totals[msg.author.name] = ct
