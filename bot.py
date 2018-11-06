@@ -68,8 +68,7 @@ async def tfp(ctx, *, phrase: str):
             msgs = await channel.history(limit=None, before=ctx.message).flatten()
             for msg in msgs:
                 if exp:
-                    match = re.search(exp, msg.content.lower())
-                    ct = 1 if match else 0
+                    ct = len(re.findall(exp, msg.content.lower()))
                 else:
                     ct = msg.content.lower().count(phrase.lower())
 
