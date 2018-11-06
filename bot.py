@@ -1,7 +1,8 @@
 import json
 import os
-import sys
 import re#eeee
+import sys
+import traceback
 
 from discord import TextChannel
 from discord.ext import commands
@@ -36,6 +37,9 @@ async def on_command_error(ctx, error):
     global is_search_running, is_index_running
     if ctx.command.name == "tfp":
         is_search_running = False
+    name = ctx.command.qualified_name if ctx.command else "None"
+    print("An error occurred executing '{}': {}\n{}"
+          .format(name, error, ''.join(traceback.format_exception(None, error, error.__traceback__))))
 
 
 @bot.event
@@ -58,7 +62,7 @@ async def tfp(ctx, *, phrase: str):
         try:
             exp = re.compile(phrase)
         except:
-            raise CommandError
+            raise commands.CommandError
         await ctx.send("Searching for regex `{}`...".format(phrase))
     else:
         await ctx.send("Searching for occurrences of `{}`...".format(phrase))
